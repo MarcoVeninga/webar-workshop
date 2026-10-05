@@ -28,6 +28,31 @@
       overflow: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+    
+        /* [OPDRACHT 2] Knoppenbalk onderaan het scherm */
+    #controls {
+      position: fixed;          /* vast op het scherm, ook als je beweegt */
+      bottom: 20px;             /* 20 pixels vanaf de onderkant */
+      left: 50%;
+      transform: translateX(-50%);  /* horizontaal centreren */
+      display: flex;
+      gap: 12px;                /* ruimte tussen de knoppen */
+      z-index: 1000;            /* zorg dat knoppen bovenop het camerabeeld liggen */
+    }
+    .btn {
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .btn:active { transform: scale(0.95); }
+    #btn-groen { background: #00aa00; }
+    #btn-rood  { background: #cc0000; }
+
   </style>
 </head>
 
@@ -44,6 +69,13 @@
     - debugUIEnabled : false = geen debug-balk onderin het scherm.
                        Zet op 'true' als de marker niet herkend wordt.
   -->
+
+  <!-- [OPDRACHT 2] Knoppenbalk -->
+  <div id="controls">
+    <button id="btn-groen" class="btn">GROEN</button>
+    <button id="btn-rood"  class="btn">ROOD</button>
+  </div>
+
   <a-scene embedded arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;">
 
     <!-- ================================================================ -->
@@ -65,12 +97,38 @@
     <a-marker type="barcode" value="1" emitevents="true">
       <!-- Kubus: links van het midden, zwevend boven de marker -->
       <a-box position="-0.4 0.4 0" color="#ff6600" depth="0.5" height="0.5" width="0.5"></a-box>
+
+        <!-- [OPDRACHT 1] Tweede vorm: een bol rechts van het midden -->
+  <a-sphere position="0.4 0.4 0" radius="0.3" color="#00ffff"></a-sphere>
+    </a-marker>
+
+        <!-- [OPDRACHT 2] Marker 2: object dat van kleur verandert -->
+    <a-marker type="barcode" value="2" emitevents="true">
+      <a-box id="stap2-kubus" position="0 0.5 0" color="#808080"
+             width="0.6" height="0.6" depth="0.6"></a-box>
     </a-marker>
 
     <!-- De AR-camera. Niet aanpassen. -->
     <a-entity camera></a-entity>
 
   </a-scene>
+
+    <!-- [OPDRACHT 2] Script: knoppen veranderen de kleur -->
+  <script>
+    // Haal de knoppen en het 3D-object op via hun id (hun 'huisnummer')
+    const stap2Kubus = document.getElementById("stap2-kubus");
+    const btnGroen   = document.getElementById("btn-groen");
+    const btnRood    = document.getElementById("btn-rood");
+
+    // ALS op de GROEN-knop wordt geklikt, DAN... (de kleur veranderen)
+    btnGroen.addEventListener("click", function() {
+      stap2Kubus.setAttribute("color", "#00ff00");
+    });
+
+    btnRood.addEventListener("click", function() {
+      stap2Kubus.setAttribute("color", "#ff0000");
+    });
+  </script>
 
   <!-- ================================================================= -->
   <!-- SCRIPT: hier komt later de logica van de knoppen (STAP 2) en       -->
